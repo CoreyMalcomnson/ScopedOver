@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3333847604741054}
-  - component: {fileID: 3333847604741053}
-  - component: {fileID: 3333847604741052}
+  - component: {fileID: 7357955761570666257}
+  - component: {fileID: 8783076811194274846}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3333847604741053
+--- !u!114 &7357955761570666257
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -49,10 +49,16 @@ MonoBehaviour:
   LogLevel: 1
   NetworkConfig:
     ProtocolVersion: 0
-    NetworkTransport: {fileID: 3333847604741052}
+    NetworkTransport: {fileID: 8783076811194274846}
     PlayerPrefab: {fileID: 7968352743369110294, guid: 10f5b4c68d5dc49a69dba27a18ad8213,
       type: 3}
-    NetworkPrefabs: []
+    NetworkPrefabs:
+    - Override: 0
+      Prefab: {fileID: 7968352743369110294, guid: 10f5b4c68d5dc49a69dba27a18ad8213,
+        type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -68,7 +74,7 @@ MonoBehaviour:
     LoadSceneTimeOut: 120
     SpawnTimeout: 1
     EnableNetworkLogs: 1
---- !u!114 &3333847604741052
+--- !u!114 &8783076811194274846
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

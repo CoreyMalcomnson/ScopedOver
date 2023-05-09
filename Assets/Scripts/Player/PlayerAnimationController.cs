@@ -9,10 +9,17 @@ public class PlayerAnimationController : NetworkBehaviour
 
     [SerializeField] private float animationDampTime = 0.1f;
 
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner)
+        {
+            this.enabled = false;
+            return;
+        }
+    }
+
     private void Update()
     {
-        if (!IsOwner) return;
-
         Vector3 movementDirection = PlayerMovementController.Local.MovementDirection;
         Transform bodyTransform = PlayerMovementController.Local.BodyTransform;
         bool isMoving = PlayerMovementController.Local.IsMoving;

@@ -8,7 +8,6 @@ public class PlayerCameraController : NetworkBehaviour
 {
     public static PlayerCameraController Local { get; private set; }
 
-    [SerializeField] private Transform cameraTransform;
     [SerializeField] private Transform targetTransform;
 
     [SerializeField] private LayerMask zoomCollisionLayerMask;
@@ -23,25 +22,32 @@ public class PlayerCameraController : NetworkBehaviour
     [SerializeField] private float zoomMin = 5;
     [SerializeField] private float zoomMax = 20;
 
+    private Transform cameraTransform;
+
     private float pitch;
     private float yaw;
     private float zoom;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
+        if (!IsOwner)
+        {
+            this.enabled = false;
+            return;
+        }
 
         Local = this;
+    }
 
-        cameraTransform.gameObject.SetActive(true);
+    private void Start()
+    {
+        cameraTransform = Camera.main.transform;
         pitch = Mathf.Lerp(pitchMin, pitchMax, 0.5f);
         zoom = Mathf.Lerp(zoomMin, zoomMax, 0.5f); ;
     }
 
     private void LateUpdate()
     {
-        if (!IsOwner) return;
-
         // Rotation
         if (PlayerInputManager.Local.AltFire)
         {

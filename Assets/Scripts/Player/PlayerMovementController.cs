@@ -14,21 +14,33 @@ public class PlayerMovementController : NetworkBehaviour
     [field: SerializeField] public Transform BodyTransform { get; private set; }
 
     [SerializeField] private CharacterController controller;
-    [SerializeField] private Transform cameraTransform;
 
     [SerializeField] private float movementSpeed = 5f;
     [SerializeField] private float rotationSpeed = 10f;
 
     [SerializeField] private LayerMask groundLayerMask;
 
+    private Transform cameraTransform;
     private Vector3 directionToMouse;
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner)
+        {
+            this.enabled = false;
+            return;
+        }
+
+        Local = this;
+    }
+
+    private void Start()
+    {
+        cameraTransform = Camera.main.transform;
+    }
 
     private void Update()
     {
-        if (!IsOwner) return;
-
-        Local = this;
-
         IsMoving = PlayerInputManager.Local.Vertical != 0 || PlayerInputManager.Local.Horizontal != 0;
 
         HandleRotation();
@@ -37,7 +49,6 @@ public class PlayerMovementController : NetworkBehaviour
 
     private void HandleMovement()
     {
-        if (!IsOwner) return;
         if (!IsMoving) return;
 
         // Get forward based on Camera
@@ -59,7 +70,6 @@ public class PlayerMovementController : NetworkBehaviour
 
     private void HandleRotation()
     {
-        if (!IsOwner) return;
         if (Physics.Raycast(Camera.main.ScreenPointToRay(PlayerInputManager.Local.MousePosition), out RaycastHit hitInfo, float.MaxValue, groundLayerMask))
         {
             directionToMouse = (hitInfo.point - BodyTransform.position).normalized;

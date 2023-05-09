@@ -18,17 +18,19 @@ public class PlayerInputManager : NetworkBehaviour
     public float MouseY { get; private set; }
     public float Scroll { get; private set; }
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
+        if (!IsOwner)
+        {
+            this.enabled = false;
+            return;
+        }
 
         Local = this;
     }
 
     private void Update()
     {
-        if (!IsOwner) return;
-
         MousePosition = Input.mousePosition;
         Fire = Input.GetMouseButton(0);
         AltFire = Input.GetMouseButton(1);
@@ -37,5 +39,10 @@ public class PlayerInputManager : NetworkBehaviour
         MouseX = Input.GetAxis("Mouse X");
         MouseY = Input.GetAxis("Mouse Y");
         Scroll = Input.GetAxis("Mouse ScrollWheel");
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Player.Local.SpawnCharacterServerRPC();
+        }
     }
 }
