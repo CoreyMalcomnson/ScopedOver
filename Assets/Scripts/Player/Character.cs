@@ -6,7 +6,7 @@ public class Character : NetworkBehaviour
 {
     public static Character Local;
 
-    [SerializeField] TMP_Text usernameText;
+    [SerializeField] TMP_Text displayNameText;
 
     public override void OnNetworkSpawn()
     {
@@ -15,9 +15,10 @@ public class Character : NetworkBehaviour
         if (IsOwner)
         {
             Local = this;
+            displayNameText.enabled = false;
         }
 
-        UpdateUsername();
+        UpdateDisplayName();
     }
 
     public override void OnNetworkDespawn()
@@ -25,11 +26,16 @@ public class Character : NetworkBehaviour
         NetworkObjectManager.Instance.RemoveCharacter(OwnerClientId);
     }
 
-    public void UpdateUsername()
+    public void UpdateDisplayName()
     {
         Player player = NetworkObjectManager.Instance.GetPlayer(OwnerClientId);
 
         if (player != null)
-            usernameText.text = player.GetUsername();
+            displayNameText.text = player.GetUsername();
+    }
+
+    public void TeleportToOtherCharacter(Character otherCharacter)
+    {
+        transform.position = otherCharacter.transform.position;
     }
 }

@@ -9,6 +9,8 @@ public class PlayerInputManager : NetworkBehaviour
 
     public Vector3 MousePosition { get; private set; }
 
+    public bool Chat { get; private set; }
+
     public bool Fire { get; private set; }
     public bool AltFire { get; private set; }
 
@@ -31,6 +33,31 @@ public class PlayerInputManager : NetworkBehaviour
 
     private void Update()
     {
+        if (MessageController.Focused)
+        {
+            ClearInput();
+        } else
+        {
+            UpdateInput();
+        }
+    }
+
+    private void ClearInput()
+    {
+        Chat = default;
+        MousePosition = default;
+        Fire = default;
+        AltFire = default;
+        Horizontal = default;
+        Vertical = default;
+        MouseX = default;
+        MouseY = default;
+        Scroll = default;
+    }
+
+    private void UpdateInput()
+    {
+        Chat = Input.GetKeyDown(KeyCode.T);
         MousePosition = Input.mousePosition;
         Fire = Input.GetMouseButton(0);
         AltFire = Input.GetMouseButton(1);
@@ -39,10 +66,5 @@ public class PlayerInputManager : NetworkBehaviour
         MouseX = Input.GetAxis("Mouse X");
         MouseY = Input.GetAxis("Mouse Y");
         Scroll = Input.GetAxis("Mouse ScrollWheel");
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Player.Local.SpawnCharacterServerRPC();
-        }
     }
 }

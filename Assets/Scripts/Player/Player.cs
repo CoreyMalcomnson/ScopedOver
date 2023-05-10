@@ -12,7 +12,7 @@ public class Player : NetworkBehaviour
     [SerializeField] private Character characterPrefab;
 
     private NetworkVariable<FixedString64Bytes> username
-        = new NetworkVariable<FixedString64Bytes>(writePerm: NetworkVariableWritePermission.Owner);
+        = new NetworkVariable<FixedString64Bytes>(writePerm: NetworkVariableWritePermission.Server);
 
     public override void OnNetworkSpawn()
     {
@@ -21,8 +21,11 @@ public class Player : NetworkBehaviour
         if (IsOwner)
         {
             Local = this;
-            username.Value = SimpleMatchmaking.Username;
+            SpawnCharacterServerRPC();
+            InitializeUsernameServerRPC(MatchmakingManager.GetUsernameInput());
         }
+
+        username.OnValueChanged += OnUsernameChanged;
     }
 
     public override void OnNetworkDespawn()
@@ -33,6 +36,17 @@ public class Player : NetworkBehaviour
     [ServerRpc(RequireOwnership = true)]
     public void SpawnCharacterServerRPC()
     {
+        SpawnCharacter();
+    }
+
+    [ServerRpc(RequireOwnership = true)]
+    private void InitializeUsernameServerRPC(FixedString64Bytes newUsername)
+    {
+        username.Value = newUsername;
+    }
+
+    public void SpawnCharacter()
+    {
         Character character = NetworkObjectManager.Instance.GetCharacter(OwnerClientId);
 
         if (character != null)
@@ -42,8 +56,21 @@ public class Player : NetworkBehaviour
         character.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
     }
 
+    private void OnUsernameChanged(FixedString64Bytes previousValue, FixedString64Bytes newValue)
+    {
+        Character character = NetworkObjectManager.Instance.GetCharacter(OwnerClientId);
+
+        if (character != null)
+            character.UpdateDisplayName();
+    }
+
     public string GetUsername()
     {
         return username.Value.ToString();
+    }
+
+    public void SetUsername(string newUsername)
+    {
+        username.Value = newUsername;
     }
 }
