@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class CharacterAnimationController : NetworkBehaviour
+public class CharacterAnimations : NetworkBehaviour
 {
     [SerializeField] private Animator animator;
 
@@ -11,18 +12,31 @@ public class CharacterAnimationController : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner)
+        if (IsOwner)
         {
-            this.enabled = false;
-            return;
+            WeaponManager.OnAttack += OnAttack;
+            Character.Local.Health.OnDeath.AddListener(OnDeath);
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        if (IsOwner)
+        {
+            WeaponManager.OnAttack -= OnAttack;
+            Character.Local.Health.OnDeath.RemoveListener(OnDeath);
         }
     }
 
     private void Update()
     {
-        Vector3 movementDirection = CharacterMovementController.Local.MovementDirection;
-        Transform bodyTransform = CharacterMovementController.Local.BodyTransform;
-        bool isMoving = CharacterMovementController.Local.IsMoving;
+        if (!IsSpawned) return;
+        if (!IsOwner) return;
+
+        // Movement
+        Vector3 movementDirection = Character.Local.MovementDirection;
+        Transform bodyTransform = Character.Local.BodyTransform;
+        bool isMoving = Character.Local.IsMoving;
 
         if (isMoving)
         {
@@ -33,6 +47,44 @@ public class CharacterAnimationController : NetworkBehaviour
             animator.SetFloat("XMovement", 0, animationDampTime, Time.deltaTime);
             animator.SetFloat("ZMovement", 0, animationDampTime, Time.deltaTime);
         }
-        
+
+        // Weapon
+        animator.SetBool("WeaponState", WeaponManager.Local.GetWeaponState());
+    }
+
+    private void OnAttack(int combo)
+    {
+        animator.SetInteger("Combo", combo);
+
+        OnAttackServerRPC();
+    }
+
+    [ServerRpc(RequireOwnership = true)]
+    private void OnAttackServerRPC()
+    {
+        ReplicateAttackClientRPC();
+    }
+
+    [ClientRpc]
+    private void ReplicateAttackClientRPC()
+    {
+        animator.SetTrigger("Attack");
+    }
+
+    private void OnDeath()
+    {
+        OnDeathServerRPC();
+    }
+
+    [ServerRpc(RequireOwnership = true)]
+    private void OnDeathServerRPC()
+    {
+        ReplicateDeathClientRPC();
+    }
+
+    [ClientRpc]
+    private void ReplicateDeathClientRPC()
+    {
+        animator.SetTrigger("Death");
     }
 }

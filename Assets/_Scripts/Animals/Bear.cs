@@ -5,17 +5,24 @@ using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class BearController : NetworkBehaviour
+public class Bear : NetworkBehaviour
 {
     public event Action OnAttack;
+    public event Action OnDeath;
+    public event Action OnDespawn;
+
+    public Health Health { get; private set; }
 
     [SerializeField] private float attackDelay = 1f;
     [SerializeField] private float attackRange = 3f;
     [SerializeField] private float rotationSpeed = 5f;
+    [SerializeField] private LayerMask entityLayerMask; 
+
+    [SerializeField] private float despawnTime = 5f;
 
     [SerializeField] private float aggroRange = 5f;
     [SerializeField] private float chaseRange = 12f;
-    [SerializeField] private float attackDamage = 3f;
+    [SerializeField] private int attackDamage = 33;
 
     [SerializeField] private float wanderRange = 10f;
 
@@ -36,7 +43,8 @@ public class BearController : NetworkBehaviour
         Sleeping = 1,
         Wandering = 2,
         Chasing = 3,
-        Attacking = 4
+        Attacking = 4,
+        Dead = 5,
     }
 
     private State state;
@@ -48,6 +56,7 @@ public class BearController : NetworkBehaviour
     private void Awake()
     {
         mover = GetComponent<AnimalMover>();
+        Health = GetComponent<Health>();
     }
 
     public override void OnNetworkSpawn()
@@ -69,6 +78,18 @@ public class BearController : NetworkBehaviour
         timer -= Time.deltaTime;
 
         // Update
+        if (target != null && target.Health.IsDead)
+        {
+            target = null;
+            SwitchState(GetRandomPassiveState());
+            return;
+        }
+
+        if (state != State.Dead && Health.GetHealthNetworkVar().Value == 0)
+        {
+            SwitchState(State.Dead);
+            return;
+        }
 
         if (state == State.Sleeping || state == State.Idle || state == State.Wandering)
         {
@@ -76,6 +97,7 @@ public class BearController : NetworkBehaviour
             {
                 target = character;
                 SwitchState(State.Chasing);
+                return;
             }
         }
 
@@ -151,7 +173,20 @@ public class BearController : NetworkBehaviour
 
                 if (timer <= 0)
                 {
-                    Debug.Log("Attack");
+                    // Collision Detection
+                    Collider[] colliders = Physics.OverlapSphere(transform.position + transform.forward * attackRange /2f, attackRange / 2f, entityLayerMask);
+                    foreach (Collider collider in colliders)
+                    {
+                        if (!collider.TryGetComponent(out Health health))
+                            return;
+
+                        if (health.NetworkObjectId != NetworkObjectId)
+                        {
+                            health.Damage(NetworkObject, attackDamage);
+                        }
+                    }
+
+                    //
                     OnAttack?.Invoke();
                     timer = attackDelay;
                 }
@@ -163,6 +198,13 @@ public class BearController : NetworkBehaviour
                     (target.transform.position - transform.position).normalized,
                     Time.deltaTime * rotationSpeed);
 
+                break;
+            case State.Dead:
+                if (timer <= 0)
+                {
+                    OnDespawn?.Invoke();
+                    NetworkObject.Despawn(true);
+                }
                 break;
         }
     }
@@ -221,6 +263,12 @@ public class BearController : NetworkBehaviour
                 mover.Stop();
 
                 break;
+            case State.Dead:
+                Debug.Log("Enetered Dead");
+                mover.Stop();
+                timer = despawnTime;
+                OnDeath?.Invoke();
+                break;
         }
     }
 
@@ -236,6 +284,8 @@ public class BearController : NetworkBehaviour
 
         foreach (KeyValuePair<ulong, Character> keyValuePair in NetworkObjectManager.Instance.GetCharacterDictionary())
         {
+            if (keyValuePair.Value.Health.IsDead) continue;
+
             float distance  = DistanceCheck(keyValuePair.Value.transform.position);
             if (distance < smallestDistance && distance <= aggroRange)
             {
@@ -250,6 +300,11 @@ public class BearController : NetworkBehaviour
     private float DistanceCheck(Vector3 pos)
     {
         return (pos - transform.position).magnitude;
+    }
+
+    public Vector3 GetVelocity()
+    {
+        return mover.GetVelocity();
     }
 
     public State GetState()

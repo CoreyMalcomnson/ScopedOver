@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerInputManager : NetworkBehaviour
+public class InputManager : NetworkBehaviour
 {
-    public static PlayerInputManager Local { get; private set; }
+    public static InputManager Local { get; private set; }
 
     public Vector3 MousePosition { get; private set; }
 
-    public bool Chat { get; private set; }
+    public bool OpenChat { get; private set; }
+    public bool ToggleWeapon { get; private set; }
 
     public bool Fire { get; private set; }
     public bool AltFire { get; private set; }
+
+    public bool FireDown { get; private set; }
+    public bool AltFireDown { get; private set; }
 
     public float Horizontal { get; private set; }
     public float Vertical { get; private set; }
@@ -44,10 +48,13 @@ public class PlayerInputManager : NetworkBehaviour
 
     private void ClearInput()
     {
-        Chat = default;
+        OpenChat = default;
+        ToggleWeapon = default;
         MousePosition = default;
         Fire = default;
         AltFire = default;
+        FireDown = default;
+        AltFireDown = default;
         Horizontal = default;
         Vertical = default;
         MouseX = default;
@@ -57,10 +64,13 @@ public class PlayerInputManager : NetworkBehaviour
 
     private void UpdateInput()
     {
-        Chat = Input.GetKeyDown(KeyCode.T);
+        OpenChat = Input.GetKeyDown(KeyCode.T);
+        ToggleWeapon = Input.GetKeyDown(KeyCode.Alpha1);
         MousePosition = Input.mousePosition;
         Fire = Input.GetMouseButton(0);
         AltFire = Input.GetMouseButton(1);
+        FireDown = Input.GetMouseButtonDown(0);
+        AltFireDown = Input.GetMouseButtonDown(1);
         Horizontal = Input.GetAxis("Horizontal");
         Vertical = Input.GetAxis("Vertical");
         MouseX = Input.GetAxis("Mouse X");

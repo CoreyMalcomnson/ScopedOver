@@ -45,7 +45,7 @@ public class MessageController : NetworkBehaviour
 
     private void Update()
     {
-        if (PlayerInputManager.Local.Chat)
+        if (InputManager.Local.OpenChat)
         {
             Select();
         }

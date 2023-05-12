@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class CharacterCameraController : NetworkBehaviour
+public class CameraController : NetworkBehaviour
 {
-    public static CharacterCameraController Local { get; private set; }
+    public static CameraController Local { get; private set; }
 
     [SerializeField] private Transform targetTransform;
 
@@ -49,19 +49,19 @@ public class CharacterCameraController : NetworkBehaviour
     private void LateUpdate()
     {
         // Rotation
-        if (PlayerInputManager.Local.AltFire)
+        if (InputManager.Local.AltFire)
         {
             pitch = Mathf.Clamp(
-                            pitch - PlayerInputManager.Local.MouseY * mouseSensitivity,
+                            pitch - InputManager.Local.MouseY * mouseSensitivity,
                             pitchMin, pitchMax);
 
-            yaw = yaw + PlayerInputManager.Local.MouseX * mouseSensitivity;
+            yaw = yaw + InputManager.Local.MouseX * mouseSensitivity;
 
         }
 
         // Zoom
         zoom = Mathf.Clamp(
-                    zoom + PlayerInputManager.Local.Scroll * zoomSensitivity,
+                    zoom + InputManager.Local.Scroll * zoomSensitivity,
                     zoomMin, zoomMax);
 
         // Check for collision

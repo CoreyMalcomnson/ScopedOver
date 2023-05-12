@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.Multiplayer.Samples.Utilities.ClientAuthority;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class Player : NetworkBehaviour
 
     [SerializeField] private Character characterPrefab;
 
-    private NetworkVariable<FixedString64Bytes> username
+    private NetworkVariable<FixedString64Bytes> usernameNetworkVar
         = new NetworkVariable<FixedString64Bytes>(writePerm: NetworkVariableWritePermission.Server);
 
     public override void OnNetworkSpawn()
@@ -48,9 +49,9 @@ public class Player : NetworkBehaviour
         character.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
     }
 
-    public NetworkVariable<FixedString64Bytes> GetUsername()
+    public NetworkVariable<FixedString64Bytes> GetUsernameNetworkVar()
     {
-        return username;
+        return usernameNetworkVar;
     }
 
     [ServerRpc(RequireOwnership = true)]
@@ -61,6 +62,6 @@ public class Player : NetworkBehaviour
 
     public void SetUsername(string newUsername)
     {
-        username.Value = newUsername;
+        usernameNetworkVar.Value = newUsername;
     }
 }

@@ -44,7 +44,7 @@ public class NetworkObjectManager: NetworkBehaviour
     {
         foreach (KeyValuePair<ulong, Player> keyValuePair in playerDictionary)
         {
-            if (keyValuePair.Value.GetUsername().Equals(name))
+            if (keyValuePair.Value.GetUsernameNetworkVar().Value.Equals(name))
             {
                 return GetCharacter(keyValuePair.Key);
             }

@@ -69,4 +69,9 @@ public class AnimalMover : NetworkBehaviour
     {
         return isNavigating;
     }
+
+    public Vector3 GetVelocity()
+    {
+        return navMeshAgent.velocity;
+    }
 }

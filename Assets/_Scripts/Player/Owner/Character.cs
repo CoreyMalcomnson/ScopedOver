@@ -3,15 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class CharacterMovementController : NetworkBehaviour
+public class Character : NetworkBehaviour
 {
-    public static CharacterMovementController Local { get; private set; }
+    public static Character Local { get; private set; }
 
     public Vector3 MovementDirection { get; private set; }
-    public bool IsMoving { get; private set; }
+    public bool IsMoving => !Health.IsDead && (InputManager.Local.Vertical != 0 || InputManager.Local.Horizontal != 0);
 
     [field: SerializeField] public Transform BodyTransform { get; private set; }
+    [field: SerializeField] public Health Health { get; private set; }
 
     [SerializeField] private CharacterController controller;
 
@@ -25,13 +27,17 @@ public class CharacterMovementController : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner)
-        {
-            this.enabled = false;
-            return;
-        }
+        NetworkObjectManager.Instance.AddCharacter(OwnerClientId, this);
 
-        Local = this;
+        if (IsOwner)
+        {
+            Local = this;
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        NetworkObjectManager.Instance.RemoveCharacter(OwnerClientId);
     }
 
     private void Start()
@@ -41,7 +47,8 @@ public class CharacterMovementController : NetworkBehaviour
 
     private void Update()
     {
-        IsMoving = PlayerInputManager.Local.Vertical != 0 || PlayerInputManager.Local.Horizontal != 0;
+        if (!IsOwner) return;
+        if (Health.IsDead) return;
 
         HandleRotation();
         HandleMovement();
@@ -61,8 +68,8 @@ public class CharacterMovementController : NetworkBehaviour
         rightDirection.Normalize();
 
         // Movement Direction
-        MovementDirection = (forwardDirection * PlayerInputManager.Local.Vertical +
-            rightDirection * PlayerInputManager.Local.Horizontal).normalized;
+        MovementDirection = (forwardDirection * InputManager.Local.Vertical +
+            rightDirection * InputManager.Local.Horizontal).normalized;
 
         // Move
         controller.Move(MovementDirection * movementSpeed * Time.deltaTime);
@@ -70,7 +77,7 @@ public class CharacterMovementController : NetworkBehaviour
 
     private void HandleRotation()
     {
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(PlayerInputManager.Local.MousePosition), out RaycastHit hitInfo, float.MaxValue, groundLayerMask))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(InputManager.Local.MousePosition), out RaycastHit hitInfo, float.MaxValue, groundLayerMask))
         {
             directionToMouse = (hitInfo.point - BodyTransform.position).normalized;
             directionToMouse.y = 0;
