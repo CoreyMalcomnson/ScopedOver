@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Mat_Terrain
+  m_Shader: {fileID: 4800000, guid: 76e675060da66bd41827332ed64c92f1, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _CliffNormal:
+        m_Texture: {fileID: 2800000, guid: 2454b07cf5234f74798ae66dc42ac631, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CliffTexture:
+        m_Texture: {fileID: 2800000, guid: eb235a25139b4e54782860e0c7a745b3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CliffTexture1:
+        m_Texture: {fileID: 2800000, guid: 2454b07cf5234f74798ae66dc42ac631, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CliffTextureNormal:
+        m_Texture: {fileID: 2800000, guid: 38f4398b29a23fa4d8313b2e81965c35, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GrassNormal:
+        m_Texture: {fileID: 2800000, guid: 888bd00b1323e924993eb84aede58e3c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GrassTexture:
+        m_Texture: {fileID: 2800000, guid: 27024cc9dbe2763459ed969634a8f2d0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GrassTexture1:
+        m_Texture: {fileID: 2800000, guid: bb8a04dc0932a7f4b95deb683730d454, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MudNormal:
+        m_Texture: {fileID: 2800000, guid: a6c04bf4c78d28447bfcea28afd4b926, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MudTexture:
+        m_Texture: {fileID: 2800000, guid: bcd4490fddf96be4ba042697e27d1c3b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MudTexture1:
+        m_Texture: {fileID: 2800000, guid: d459254c1009b024c96a5b38a77e5a19, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StoneNormal:
+        m_Texture: {fileID: 2800000, guid: c55a9715f2e92b142a30778f91ac4706, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StoneTextture:
+        m_Texture: {fileID: 2800000, guid: 0a224dad92b93ce42808b3b493356c16, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StoneTexture:
+        m_Texture: {fileID: 2800000, guid: 70682fe6de72de741a06a80a0c447459, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StoneTexture1:
+        m_Texture: {fileID: 2800000, guid: 3de276323628f734684fe70c6b7607f9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture0:
+        m_Texture: {fileID: 2800000, guid: eb235a25139b4e54782860e0c7a745b3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture1:
+        m_Texture: {fileID: 2800000, guid: ea7776da552041246a13894a63d7d440, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2:
+        m_Texture: {fileID: 2800000, guid: d459254c1009b024c96a5b38a77e5a19, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture3:
+        m_Texture: {fileID: 2800000, guid: 2454b07cf5234f74798ae66dc42ac631, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture4:
+        m_Texture: {fileID: 2800000, guid: c55a9715f2e92b142a30778f91ac4706, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: 2454b07cf5234f74798ae66dc42ac631, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample1:
+        m_Texture: {fileID: 2800000, guid: bb8a04dc0932a7f4b95deb683730d454, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TopTexture0:
+        m_Texture: {fileID: 2800000, guid: bb8a04dc0932a7f4b95deb683730d454, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TopTexture4:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _CliffNormalIntensity: 0.15
+    - _CliffNormalStrength: 0.5
+    - _Float0: 0.48576105
+    - _GrassNormalStrength: 0.5
+    - __dirty: 0
+    m_Colors:
+    - _CliffNormalSize: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _CliffNormalTextureSize: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _CliffTextureSize: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _CliffTextureSize1: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _GrassNormalSize: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _GrassTextureSize: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _GrassTextureSize1: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _MudNormalSize: {r: 1, g: 1, b: 0, a: 0}
+    - _MudTextureSize: {r: 1, g: 1, b: 0, a: 0}
+    - _MudTextureSize1: {r: 1, g: 1, b: 0, a: 0}
+    - _StoneNormalSize: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _StoneTextureSize: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _StoneTextureSize1: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _Texture1Size: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _Texture2Size: {r: 1, g: 1, b: 0, a: 0}
+    - _Vector0: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _Vector1: {r: 1, g: 1, b: 0, a: 0}
+    - _Vector2: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _Vector3: {r: 0.5, g: 0.5, b: 0, a: 0}

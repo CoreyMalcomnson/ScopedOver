@@ -71,6 +71,25 @@ public class Bear : NetworkBehaviour
         SwitchState(GetRandomPassiveState());
     }
 
+    public override void OnNetworkDespawn()
+    {
+        if (!IsServer)
+        {
+            return;
+        }
+
+        BearManager.Instance.RemoveBear(this);
+    }
+
+    private void Start()
+    {
+        if (!IsServer)
+        {
+            return;
+        }
+        BearManager.Instance.AddBear(this);
+    }
+
     private void Update()
     {
         if (!IsSpawned) return;

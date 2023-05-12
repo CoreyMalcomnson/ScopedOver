@@ -71,8 +71,10 @@ public class Character : NetworkBehaviour
         MovementDirection = (forwardDirection * InputManager.Local.Vertical +
             rightDirection * InputManager.Local.Horizontal).normalized;
 
+        Vector3 movement = (MovementDirection * movementSpeed) + (Vector3.down * 9f);
+
         // Move
-        controller.Move(MovementDirection * movementSpeed * Time.deltaTime);
+        controller.Move(movement * Time.deltaTime);
     }
 
     private void HandleRotation()

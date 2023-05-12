@@ -197,7 +197,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1.34
-  m_BaseOffset: 0
+  m_BaseOffset: -0.24
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &8200413787820618882
@@ -275,7 +275,7 @@ MonoBehaviour:
   despawnTime: 5
   aggroRange: 5
   chaseRange: 12
-  attackDamage: 33
+  attackDamage: 20
   wanderRange: 10
   minSleepTime: 5
   maxSleepTime: 10

@@ -97,6 +97,8 @@ public class WeaponManager : NetworkBehaviour
             if (!collider.TryGetComponent(out Health health))
                 return;
 
+            if (health.IsDead) return;
+
             if (health.NetworkObjectId != NetworkObjectId)
             {
                 health.Damage(NetworkObject, attackDamage);
@@ -105,13 +107,20 @@ public class WeaponManager : NetworkBehaviour
                 if (health.IsDead)
                 {
                     Player killer = NetworkObjectManager.Instance.GetPlayer(OwnerClientId);
-                    string killed = health.gameObject.name;
+                    string killed = "Unknown";
 
-                    Player potentialKilledPlayer = NetworkObjectManager.Instance.GetPlayer(health.OwnerClientId);
-                    if (potentialKilledPlayer != null)
+                    if (health.IsOwnedByServer)
                     {
-                        killed = potentialKilledPlayer.GetUsernameNetworkVar().Value.ToString();
+                        killed = health.gameObject.name;
+                    } else
+                    {
+                        Player killedPlayer = NetworkObjectManager.Instance.GetPlayer(health.OwnerClientId);
+                        if (killedPlayer != null)
+                        {
+                            killed = killedPlayer.GetUsernameNetworkVar().Value.ToString();
+                        }
                     }
+                    
 
                     if (killer != null) Scoreboard.Instance.AddKill(killer, killed);
                 }
